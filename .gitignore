@@ -1,0 +1,7 @@
+# Estado y caché de Terraform: no se versionan (el estado guarda los IDs de la cuenta)
+terraform/.terraform/
+terraform/.build/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/deploy.auto.tfvars
+__pycache__/

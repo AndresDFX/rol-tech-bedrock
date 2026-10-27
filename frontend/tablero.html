@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tablero en vivo · ¿Qué rol tech eres?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root {
+    --bg: #1D1442; --ink: #FFFFFF; --soft: #B6ADD9; --track: #2E2463;
+    --violet: #9B6BFF; --orange: #FF9900;
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); min-height: 100vh; }
+  .wrap { display: grid; grid-template-columns: 1fr 1.6fr; gap: 6vw; padding: 5vh 5vw; min-height: 100vh; align-items: center; }
+  h1 { font-family: var(--display); font-size: clamp(2rem, 4.2vw, 4rem); line-height: 1.02; margin: 0 0 3vh; letter-spacing: -0.02em; }
+  .qr { background: #fff; padding: 18px; border-radius: 20px; display: inline-block; }
+  .url { margin-top: 2vh; color: var(--soft); font-size: clamp(0.9rem, 1.3vw, 1.2rem); word-break: break-all; }
+  .total { font-family: var(--display); font-size: clamp(3rem, 7vw, 6.5rem); line-height: 1; color: var(--orange); }
+  .total-label { color: var(--soft); font-size: clamp(1rem, 1.5vw, 1.4rem); margin-bottom: 4vh; }
+  .row { margin-bottom: 2.6vh; }
+  .row-head { display: flex; justify-content: space-between; font-weight: 700; font-size: clamp(1rem, 1.7vw, 1.6rem); margin-bottom: 0.8vh; }
+  .track { height: clamp(14px, 2.4vh, 26px); background: var(--track); border-radius: 999px; overflow: hidden; }
+  .bar { height: 100%; width: 0; background: var(--violet); border-radius: 999px; transition: width .8s ease; }
+  .row.lead .bar { background: var(--orange); }
+  .status { color: var(--soft); margin-top: 2vh; font-size: 0.95rem; }
+  @media (max-width: 800px) { .wrap { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .bar { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div>
+    <h1>¿Qué rol tech eres?</h1>
+    <div class="qr" id="qr"></div>
+    <p class="url" id="url"></p>
+  </div>
+  <div>
+    <div class="total" id="total">0</div>
+    <div class="total-label">personas del auditorio ya tienen su rol</div>
+    <div id="rows"></div>
+    <p class="status" id="status">Conectando con la API…</p>
+  </div>
+</div>
+<script>
+  // Versión 2: nada que configurar. El tablero se abre desde el mismo dominio de la app
+  // (https://xxxx.cloudfront.net/tablero.html): el QR apunta a la raíz de ese dominio y la API es "api".
+  // Abierto con doble clic (file://) no funcionaría: el navegador manda Origin: null y no hay datos.
+  const API = "api";
+  const APP_URL = location.origin + "/";
+  const CADA_MS = 4000;   // frecuencia de actualización, solo con la pestaña visible
+
+  const ORDEN = ["cloud", "devops", "data", "security", "frontend", "pm"];
+  const NOMBRES = { cloud: "Cloud Architect", devops: "DevOps / SRE", data: "Data & AI Engineer",
+    security: "Cybersecurity Specialist", frontend: "Frontend / UX Developer", pm: "Tech Project Manager" };
+
+  document.getElementById("url").textContent = APP_URL.replace(/\/$/, "");
+  if (window.QRCode && location.protocol === "https:") {
+    new QRCode(document.getElementById("qr"), { text: APP_URL, width: 300, height: 300 });
+  } else {
+    document.getElementById("qr").textContent = "Abre este tablero desde su URL de CloudFront para ver el QR";
+  }
+
+  const rows = document.getElementById("rows");
+  ORDEN.forEach(k => {
+    rows.insertAdjacentHTML("beforeend",
+      `<div class="row" id="row-${k}"><div class="row-head"><span>${NOMBRES[k]}</span><span id="n-${k}">0</span></div>
+       <div class="track"><div class="bar" id="b-${k}"></div></div></div>`);
+  });
+
+  async function actualizar() {
+    const status = document.getElementById("status");
+    if (document.hidden) return;
+    try {
+      const r = await fetch(`${API}/stats`, { cache: "no-store" });
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+      const max = Math.max(1, ...Object.values(d.conteos));
+      document.getElementById("total").textContent = d.total;
+      ORDEN.forEach(k => {
+        const n = d.conteos[k] || 0;
+        document.getElementById(`n-${k}`).textContent = n;
+        document.getElementById(`b-${k}`).style.width = `${(n / max) * 100}%`;
+        document.getElementById(`row-${k}`).classList.toggle("lead", n === max && n > 0);
+      });
+      status.textContent = `Actualizado ${new Date().toLocaleTimeString("es-CO")}`;
+    } catch (e) {
+      status.textContent = "Sin conexión con la API. Reintentando…";
+    }
+  }
+  actualizar();
+  setInterval(actualizar, CADA_MS);
+  document.addEventListener("visibilitychange", actualizar);
+</script>
+</body>
+</html>

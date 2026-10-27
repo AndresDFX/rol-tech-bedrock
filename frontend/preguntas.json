@@ -1,0 +1,228 @@
+{
+  "roles": {
+    "cloud": {
+      "nombre": "Cloud Architect",
+      "desc": "Ves el panorama completo y te encanta diseñar sistemas que no se caen.",
+      "servicios": [
+        "Amazon EC2",
+        "Amazon VPC",
+        "AWS Well-Architected"
+      ]
+    },
+    "devops": {
+      "nombre": "DevOps / SRE",
+      "desc": "Automatizas todo lo que se repite dos veces y amas que las cosas fluyan.",
+      "servicios": [
+        "AWS CodePipeline",
+        "AWS Lambda",
+        "Amazon CloudWatch"
+      ]
+    },
+    "data": {
+      "nombre": "Data & AI Engineer",
+      "desc": "Encuentras historias en los datos y te emociona enseñarle a una máquina a aprender.",
+      "servicios": [
+        "Amazon S3",
+        "Amazon Bedrock",
+        "Amazon SageMaker AI"
+      ]
+    },
+    "security": {
+      "nombre": "Cybersecurity Specialist",
+      "desc": "Piensas como atacante para proteger como guardián. Nada se te escapa.",
+      "servicios": [
+        "AWS IAM",
+        "Amazon GuardDuty",
+        "AWS Security Hub"
+      ]
+    },
+    "frontend": {
+      "nombre": "Frontend / UX Developer",
+      "desc": "Conviertes ideas en experiencias que la gente disfruta usar.",
+      "servicios": [
+        "AWS Amplify",
+        "Amazon CloudFront",
+        "Amazon S3"
+      ]
+    },
+    "pm": {
+      "nombre": "Tech Project Manager",
+      "desc": "Conectas personas, tiempos y tecnología para que las cosas sí pasen.",
+      "servicios": [
+        "AWS Cost Explorer",
+        "AWS Well-Architected",
+        "AWS Cloud Practitioner"
+      ]
+    }
+  },
+  "preguntas": [
+    {
+      "q": "Es viernes y tu grupo quiere salir. ¿Qué haces?",
+      "o": [
+        [
+          "Armo el plan completo: lugar, transporte y plan B",
+          "cloud"
+        ],
+        [
+          "Creo el grupo, reparto tareas y pongo la hora",
+          "pm"
+        ],
+        [
+          "Diseño la invitación más bonita del semestre",
+          "frontend"
+        ],
+        [
+          "Comparo reseñas y precios antes de decidir",
+          "data"
+        ]
+      ]
+    },
+    {
+      "q": "En un trabajo en grupo, tu rol natural es…",
+      "o": [
+        [
+          "Organizar fechas y entregables",
+          "pm"
+        ],
+        [
+          "Crear plantillas y atajos para no repetir trabajo",
+          "devops"
+        ],
+        [
+          "Revisar que nada tenga errores ni huecos",
+          "security"
+        ],
+        [
+          "Diseñar la presentación final",
+          "frontend"
+        ]
+      ]
+    },
+    {
+      "q": "Tu app favorita se cae justo cuando la necesitas. Piensas…",
+      "o": [
+        [
+          "Seguro no aguantó tantos usuarios",
+          "cloud"
+        ],
+        [
+          "¿Será que la hackearon?",
+          "security"
+        ],
+        [
+          "Apuesto a que nadie estaba monitoreando",
+          "devops"
+        ],
+        [
+          "Ya mismo busco en redes cuánta gente está afectada",
+          "data"
+        ]
+      ]
+    },
+    {
+      "q": "¿Qué superpoder elegirías?",
+      "o": [
+        [
+          "Predecir el futuro con datos",
+          "data"
+        ],
+        [
+          "Volverme invisible para detectar intrusos",
+          "security"
+        ],
+        [
+          "Clonarme para hacer todo al mismo tiempo",
+          "devops"
+        ],
+        [
+          "Convertir ideas en pantallas con solo pensarlas",
+          "frontend"
+        ]
+      ]
+    },
+    {
+      "q": "En un videojuego en equipo, tú eres…",
+      "o": [
+        [
+          "Quien diseña la base y la estrategia",
+          "cloud"
+        ],
+        [
+          "Quien coordina al equipo por el chat de voz",
+          "pm"
+        ],
+        [
+          "Quien optimiza cada movimiento para ganar tiempo",
+          "devops"
+        ],
+        [
+          "Quien analiza al rival antes de atacar",
+          "data"
+        ]
+      ]
+    },
+    {
+      "q": "¿Cómo está tu celular ahora mismo?",
+      "o": [
+        [
+          "Apps ordenadas en carpetas con nombre",
+          "pm"
+        ],
+        [
+          "Verificación en dos pasos en todo",
+          "security"
+        ],
+        [
+          "Fondo y widgets personalizados al detalle",
+          "frontend"
+        ],
+        [
+          "Lleno de apps nuevas que estoy probando",
+          "cloud"
+        ]
+      ]
+    },
+    {
+      "q": "¿Qué frase te describe mejor?",
+      "o": [
+        [
+          "Si se puede automatizar, no lo hago a mano",
+          "devops"
+        ],
+        [
+          "Primero el plano, después la construcción",
+          "cloud"
+        ],
+        [
+          "Los números no mienten",
+          "data"
+        ],
+        [
+          "Lo importante es que la gente lo disfrute",
+          "frontend"
+        ]
+      ]
+    },
+    {
+      "q": "Hackatón de 24 horas. Tú…",
+      "o": [
+        [
+          "Presento el pitch ante los jurados",
+          "pm"
+        ],
+        [
+          "Intento romper el prototipo antes que los jurados",
+          "security"
+        ],
+        [
+          "Preparo los datos y el modelo de IA",
+          "data"
+        ],
+        [
+          "Me aseguro de que la demo no se caiga",
+          "devops"
+        ]
+      ]
+    }
+  ]
+}

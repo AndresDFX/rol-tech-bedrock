@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Qué rol tech eres?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #1D1442;
+    --ink-soft: #5B5380;
+    --paper: #FBF9FF;
+    --card: #FFFFFF;
+    --line: #E3DCF5;
+    --violet: #6A2FD8;
+    --violet-soft: #EFE8FF;
+    --orange: #FF9900;
+    --mint: #0E9F6E;
+    --on-violet: #FFFFFF;
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --ink: #F2EEFF;
+      --ink-soft: #B6ADD9;
+      --paper: #17102F;
+      --card: #221945;
+      --line: #3A2F66;
+      --violet: #9B6BFF;
+      --violet-soft: #2D2259;
+      --mint: #3DD9A2;
+      --on-violet: #17102F;
+    }
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html, body { margin: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  main { max-width: 560px; margin: 0 auto; padding: 28px 20px 48px; }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0; }
+  h1 { font-size: clamp(2.2rem, 9vw, 3.2rem); font-weight: 800; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(1.5rem, 6vw, 2rem); font-weight: 800; letter-spacing: -0.01em; }
+  p { margin: 0; }
+  .muted { color: var(--ink-soft); }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Inicio */
+  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 36px; color: var(--ink-soft); font-size: 0.95rem; }
+  .cloud-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--orange); }
+  .intro p { margin-top: 16px; font-size: 1.1rem; }
+  label { display: block; font-weight: 700; margin: 32px 0 8px; }
+  input[type=text] {
+    width: 100%; font: inherit; padding: 14px 16px; border-radius: 14px;
+    border: 2px solid var(--line); background: var(--card); color: var(--ink);
+  }
+  input[type=text]:focus { outline: none; border-color: var(--violet); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; width: 100%;
+    margin-top: 20px; padding: 16px; border: 0; border-radius: 999px;
+    background: var(--violet); color: var(--on-violet);
+    font: 700 1.05rem var(--body); cursor: pointer;
+  }
+  .btn:focus-visible, .opt:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+  .btn.ghost { background: transparent; color: var(--violet); border: 2px solid var(--violet); }
+
+  /* Preguntas */
+  .progress { display: flex; gap: 6px; margin-bottom: 28px; }
+  .progress span { flex: 1; height: 6px; border-radius: 6px; background: var(--line); transition: background .3s; }
+  .progress span.done { background: var(--violet); }
+  .qnum { color: var(--ink-soft); font-weight: 500; margin-bottom: 10px; }
+  .options { display: grid; gap: 12px; margin-top: 26px; }
+  .opt {
+    display: flex; gap: 14px; align-items: flex-start; text-align: left;
+    padding: 16px; border-radius: 16px; border: 2px solid var(--line);
+    background: var(--card); color: var(--ink); font: inherit; cursor: pointer;
+    transition: border-color .15s, transform .1s;
+  }
+  .opt:hover { border-color: var(--violet); }
+  .opt:active { transform: scale(0.98); }
+  .opt .key {
+    flex: none; width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 700; font-size: 0.9rem;
+    background: var(--violet-soft); color: var(--violet);
+  }
+  .opt.picked { border-color: var(--violet); background: var(--violet-soft); }
+
+  /* Cargando */
+  .loading { text-align: center; padding-top: 18vh; }
+  .orbit { width: 70px; height: 70px; margin: 0 auto 26px; border-radius: 50%;
+    border: 6px solid var(--line); border-top-color: var(--orange); animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .orbit { animation-duration: 3s; } }
+
+  /* Resultado: credencial tipo evento tech */
+  .badge {
+    position: relative; background: var(--card); border: 2px solid var(--line);
+    border-radius: 24px; padding: 30px 24px 24px; margin-top: 8px; overflow: hidden;
+  }
+  .badge::before {
+    content: ""; position: absolute; top: -40px; right: -40px; width: 140px; height: 140px;
+    border-radius: 50%; background: var(--orange); opacity: .18;
+  }
+  .badge .hello { color: var(--ink-soft); font-weight: 500; }
+  .badge .role { font-family: var(--display); font-weight: 800; color: var(--violet);
+    font-size: clamp(2rem, 9vw, 2.8rem); line-height: 1.05; margin: 6px 0 4px; letter-spacing: -0.02em; }
+  .badge .nick { font-weight: 700; font-size: 1.1rem; }
+  .badge .desc { margin-top: 16px; }
+  .block { margin-top: 22px; }
+  .block h3 { font-family: var(--body); font-size: 0.95rem; font-weight: 700; color: var(--ink-soft); margin-bottom: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { padding: 7px 14px; border-radius: 999px; background: var(--violet-soft); color: var(--violet); font-weight: 700; font-size: 0.92rem; }
+  .step-first { padding: 14px 16px; border-radius: 14px; background: var(--violet-soft); }
+
+  /* Cómo viajó tu respuesta */
+  .journey { margin-top: 30px; }
+  .journey ol { list-style: none; padding: 0; margin: 14px 0 0; }
+  .journey li { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .journey li:last-child { border-bottom: 0; }
+  .journey .n { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--orange); color: #1D1442;
+    display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
+  .journey b { display: block; }
+  .journey small { color: var(--ink-soft); }
+  .error { margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: var(--violet-soft); font-size: 0.95rem; }
+</style>
+</head>
+<body>
+<main>
+  <!-- Pantalla 1: inicio -->
+  <section class="screen active" id="s-inicio">
+    <div class="brand"><span class="cloud-dot" aria-hidden="true"></span> Charla AWS · Demo en vivo</div>
+    <div class="intro">
+      <h1>¿Qué rol tech eres?</h1>
+      <p class="muted">8 preguntas rápidas. Al final, una IA en la nube de AWS arma tu perfil y te dice qué aprender primero.</p>
+    </div>
+    <label for="nombre">¿Cómo te decimos?</label>
+    <input type="text" id="nombre" maxlength="24" placeholder="Tu nombre o apodo" autocomplete="nickname">
+    <button class="btn" id="btn-empezar">Empezar el test</button>
+  </section>
+
+  <!-- Pantalla 2: preguntas -->
+  <section class="screen" id="s-preguntas">
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <p class="qnum" id="qnum"></p>
+    <h2 id="qtext"></h2>
+    <div class="options" id="options"></div>
+  </section>
+
+  <!-- Pantalla 3: cargando -->
+  <section class="screen loading" id="s-cargando" aria-live="polite">
+    <div class="orbit" aria-hidden="true"></div>
+    <h2>Consultando a la nube…</h2>
+    <p class="muted" id="loading-msg" style="margin-top:10px">Tu respuesta va camino a AWS</p>
+  </section>
+
+  <!-- Pantalla 4: resultado -->
+  <section class="screen" id="s-resultado">
+    <div class="badge">
+      <p class="hello" id="r-hola"></p>
+      <p class="role" id="r-rol"></p>
+      <p class="nick" id="r-titulo"></p>
+      <p class="desc" id="r-desc"></p>
+      <div class="block"><h3>Tu superpoder</h3><p id="r-super"></p></div>
+      <div class="block" id="r-serv-wrap"><h3>Servicios de AWS para empezar</h3><div class="chips" id="r-serv"></div></div>
+      <div class="block"><h3>Tu primer paso esta semana</h3><p class="step-first" id="r-paso"></p></div>
+    </div>
+
+    <div class="journey">
+      <h2>Así viajó tu respuesta</h2>
+      <ol id="journey"></ol>
+    </div>
+    <p class="error" id="r-error" hidden></p>
+    <button class="btn ghost" id="btn-otra">Hacer el test otra vez</button>
+  </section>
+</main>
+
+<script>
+  // Versión 2: nada que configurar. La página y la API salen del mismo dominio (CloudFront), así que la
+  // API es la ruta relativa "api", y las preguntas y los roles vienen de preguntas.json, el mismo archivo
+  // que usa la Lambda para calcular el rol.
+  const API = "api";
+  let ROLES = {}, PREGUNTAS = [];
+  const datos = fetch("preguntas.json", { cache: "no-cache" }).then(r => r.json()).then(d => {
+    ROLES = d.roles; PREGUNTAS = d.preguntas;
+  });
+
+  const $ = id => document.getElementById(id);
+  let idx = 0, puntos = {}, elegidas = [], indices = [], nombre = "";
+
+  function mostrar(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    $(id).classList.add("active");
+    window.scrollTo(0, 0);
+  }
+
+  async function iniciar() {
+    await datos;
+    nombre = $("nombre").value.trim() || "Estudiante";
+    idx = 0; elegidas = []; indices = [];
+    puntos = Object.fromEntries(Object.keys(ROLES).map(k => [k, 0]));
+    $("progress").innerHTML = PREGUNTAS.map(() => "<span></span>").join("");
+    pintarPregunta();
+    mostrar("s-preguntas");
+  }
+
+  function pintarPregunta() {
+    const p = PREGUNTAS[idx];
+    $("qnum").textContent = `Pregunta ${idx + 1} de ${PREGUNTAS.length}`;
+    $("qtext").textContent = p.q;
+    [...$("progress").children].forEach((s, i) => s.classList.toggle("done", i < idx));
+    $("options").innerHTML = "";
+    p.o.forEach(([texto, rol], i) => {
+      const b = document.createElement("button");
+      b.className = "opt";
+      b.innerHTML = `<span class="key">${"ABCD"[i]}</span><span></span>`;
+      b.lastChild.textContent = texto;
+      b.onclick = () => elegir(b, texto, rol, i);
+      $("options").appendChild(b);
+    });
+  }
+
+  function elegir(boton, texto, rol, i) {
+    if (boton.classList.contains("picked")) return;  // un doble toque no cuenta dos veces
+    boton.classList.add("picked");
+    puntos[rol]++; elegidas.push(texto); indices.push(i);
+    setTimeout(() => {
+      idx++;
+      if (idx < PREGUNTAS.length) pintarPregunta(); else terminar();
+    }, 220);
+  }
+
+  function calcularRol() {
+    const max = Math.max(...Object.values(puntos));
+    const empatados = Object.keys(puntos).filter(k => puntos[k] === max);
+    return empatados[Math.floor(Math.random() * empatados.length)];
+  }
+
+  async function terminar() {
+    const rol = calcularRol();
+    mostrar("s-cargando");
+    const mensajes = ["Tu respuesta va camino a AWS", "API Gateway recibió tu pedido", "Lambda está despertando", "La IA está escribiendo tu perfil"];
+    let m = 0;
+    const timer = setInterval(() => { m = Math.min(m + 1, mensajes.length - 1); $("loading-msg").textContent = mensajes[m]; }, 900);
+
+    const t0 = performance.now();
+    let data = null, error = "";
+    try {
+      data = await enviar({ nombre, respuestas: indices });
+    } catch (e) {
+      error = `Modo sin conexión: ${e.message}. Te mostramos tu resultado calculado en el navegador.`;
+    }
+    const totalMs = Math.round(performance.now() - t0);
+    clearInterval(timer);
+    pintarResultado(data?.rol || rol, data, totalMs, error);
+  }
+
+  // Hasta 6 intentos si la API responde 429 o 5xx (la sala entera manda a la vez y Lambda tiene un tope de
+  // ejecuciones simultáneas) o si se cae la conexión del celular. La espera crece (0,4 · 0,8 · 1,6 · 3 · 3 s)
+  // y lleva un extra al azar para no volver a chocar todos juntos. Un 4xx no se reintenta: repetir no lo
+  // arregla. Medido con un tope de 10 ejecuciones y 50 envíos en el mismo segundo: con Nova Lite sola, 50 de
+  // 50 con perfil; con Haiku primero (tarda más y ocupa más tiempo cada ejecución), 42 de 50.
+  async function enviar(cuerpo) {
+    const limite = Date.now() + 25000;
+    for (let intento = 1; intento <= 6; intento++) {
+      const ctrl = new AbortController();
+      const corte = setTimeout(() => ctrl.abort(), Math.max(1000, limite - Date.now()));
+      let motivo;
+      try {
+        const r = await fetch(`${API}/rol`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(cuerpo),
+          signal: ctrl.signal
+        });
+        if (r.ok) return await r.json();
+        motivo = `la API respondió con código ${r.status}`;
+        if (!(r.status === 429 || r.status >= 500)) throw new Error(motivo);
+      } catch (e) {
+        if (e.message === motivo) throw e;
+        motivo = e.name === "AbortError" ? "la API no respondió a tiempo" : "no hubo conexión con la API";
+      } finally {
+        clearTimeout(corte);
+      }
+      if (intento === 6 || Date.now() + 1500 > limite) throw new Error(motivo);
+      await new Promise(ok => setTimeout(ok, Math.min(3000, 400 * 2 ** (intento - 1)) + Math.random() * 1000));
+    }
+  }
+
+  function pintarResultado(rol, data, totalMs, error) {
+    const base = ROLES[rol];
+    const perfil = data?.perfil || {};
+    $("r-hola").textContent = `Hola, ${nombre}. Tu rol tech es`;
+    $("r-rol").textContent = base.nombre;
+    $("r-titulo").textContent = perfil.titulo || "";
+    $("r-desc").textContent = perfil.descripcion || base.desc;
+    $("r-super").textContent = perfil.superpoder || "Curiosidad sin límites";
+    const servicios = (perfil.servicios_aws && perfil.servicios_aws.length) ? perfil.servicios_aws : base.servicios;
+    $("r-serv").innerHTML = "";
+    servicios.forEach(s => { const c = document.createElement("span"); c.className = "chip"; c.textContent = s; $("r-serv").appendChild(c); });
+    $("r-paso").textContent = perfil.primer_paso || "Crea tu cuenta en AWS Skill Builder y toma el curso Cloud Practitioner Essentials.";
+
+    const iaMs = data?.tiempos?.ia_ms;
+    const pasos = data ? [
+      ["Amazon CloudFront y S3", "Te entregaron esta página, por HTTPS"],
+      ["Amazon API Gateway", "Recibió tus respuestas y las pasó a Lambda"],
+      ["AWS Lambda", "Calculó tu rol y ejecutó el código sin ningún servidor encendido"],
+      ["Amazon Bedrock", data.fuente === "bedrock" ? `La IA (${data.modelo || "un modelo de Bedrock"}) escribió tu perfil en ${iaMs} ms` : "La IA no respondió a tiempo; usamos el texto de respaldo"],
+      ["Amazon DynamoDB", "Sumó tu resultado al tablero del auditorio"],
+      ["Tiempo total", `${totalMs} ms de ida y vuelta`]
+    ] : [
+      ["Amazon CloudFront y S3", "Te entregaron esta página, por HTTPS"],
+      ["Tu navegador", "Calculó el resultado sin conectarse a la API"]
+    ];
+    $("journey").innerHTML = "";
+    pasos.forEach(([t, d], i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span class="n">${i + 1}</span><div><b></b><small></small></div>`;
+      li.querySelector("b").textContent = t;
+      li.querySelector("small").textContent = d;
+      $("journey").appendChild(li);
+    });
+    $("r-error").hidden = !error;
+    $("r-error").textContent = error;
+    mostrar("s-resultado");
+  }
+
+  $("btn-empezar").onclick = () => iniciar();
+  $("nombre").addEventListener("keydown", e => { if (e.key === "Enter") iniciar(); });
+  $("btn-otra").onclick = () => mostrar("s-inicio");
+</script>
+</body>
+</html>
