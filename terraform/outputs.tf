@@ -36,6 +36,16 @@ output "api_directa" {
   value       = aws_apigatewayv2_api.api.api_endpoint
 }
 
+output "consola_personaje" {
+  description = "Momento 2 de la demo: la Lambda en la consola, en sus variables de entorno (PERSONAJE)"
+  value       = "https://${var.region}.console.aws.amazon.com/lambda/home?region=${var.region}#/functions/${aws_lambda_function.api.function_name}?tab=configure&subtab=envVars"
+}
+
+output "consola_monitor" {
+  description = "Momento 3 de la demo: métricas de la Lambda y el botón de Live Tail"
+  value       = "https://${var.region}.console.aws.amazon.com/lambda/home?region=${var.region}#/functions/${aws_lambda_function.api.function_name}?tab=monitoring"
+}
+
 output "funcion" {
   value = aws_lambda_function.api.function_name
 }

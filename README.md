@@ -38,7 +38,7 @@ Desde tu computador: Terraform ≥ 1.5 y la AWS CLI con credenciales, en Git Bas
 corras desde una carpeta de Google Drive**: el provider de AWS pesa unos 800 MB y el estado de Terraform no debe
 sincronizarse.
 
-`deploy.sh` imprime la URL de la app y la del tablero. La primera vez, CloudFront tarda de 1 a 2,5 min en
+`deploy.sh` imprime la URL de la app, la del tablero y dos enlaces a la consola de la Lambda: sus variables de entorno (`PERSONAJE`, momento 2) y Monitor (momento 3). La primera vez, CloudFront tarda de 1 a 2,5 min en
 responder: si no carga, espera y recarga. En la verificación, el despliegue completo tardó 113 s (con la
 descarga del provider).
 
