@@ -1,9 +1,9 @@
 """
-App "¿Qué rol tech eres?" (versión 2): backend en AWS Lambda (Python 3.13).
+App "¿Qué rol tech eres?": backend en AWS Lambda (Python 3.13).
 
 Rutas (HTTP API detrás de CloudFront, en el mismo dominio de la página, sin CORS):
   POST /api/rol    recibe el nombre y el índice de la opción elegida en cada pregunta. Calcula aquí el rol
-                   (el navegador ya no decide qué se cuenta), pide a Bedrock el perfil en JSON, lo valida y
+                   (el navegador no decide qué se cuenta), pide a Bedrock el perfil en JSON, lo valida y
                    suma 1 al rol en DynamoDB.
   GET  /api/stats  cuántas personas obtuvieron cada rol: lo lee el tablero del proyector.
 

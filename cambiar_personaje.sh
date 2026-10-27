@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Plan B del momento 2 de la demo: cambia cómo habla la IA sin abrir la consola (la variable PERSONAJE
-# de la Lambda). Sin argumento, vuelve al valor original.
+# de la Lambda). Sin argumento, vuelve al de siempre.
 # Uso:  ./cambiar_personaje.sh "un narrador de fútbol colombiano muy emocionado"
 #       ./cambiar_personaje.sh                       (vuelve a "un mentor tech divertido")
 set -euo pipefail
@@ -18,4 +18,4 @@ aws lambda update-function-configuration --function-name "$FUNCION" --environmen
 aws lambda wait function-updated --function-name "$FUNCION"
 echo "PERSONAJE: $NUEVO"
 echo "QUÉ MIRAR AHORA: el siguiente test ya habla así (pide a la sala «Hacer el test otra vez»)."
-echo "  Al terminar la demo: ./cambiar_personaje.sh  (sin argumento, vuelve al original)."
+echo "  Al terminar la demo: ./cambiar_personaje.sh  (sin argumento, vuelve al mentor tech divertido)."

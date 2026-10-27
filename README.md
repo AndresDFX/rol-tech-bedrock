@@ -1,4 +1,4 @@
-# ¿Qué rol tech eres? · el código (versión 2)
+# ¿Qué rol tech eres? · el código
 
 La app de la charla, para la Universidad de San Buenaventura (Cali, 2026): el público hace un test de 8 preguntas
 en el celular, una IA en Amazon Bedrock le escribe un perfil y un tablero en el proyector muestra en vivo qué rol
@@ -14,20 +14,6 @@ celular ─► CloudFront (https://xxxx.cloudfront.net)
 ```
 
 Verificado en AWS el 26-oct-2026: despliegue, test desde el celular, tablero, ráfagas de 50 envíos y borrado.
-
-## Qué cambió frente a la versión 1
-
-| Versión 1 | Qué pasaba al probarla | Versión 2 |
-|---|---|---|
-| `ADD total :uno` en DynamoDB | `total` es palabra reservada: cada suma fallaba, el `except` lo escondía y **el tablero se quedaba en 0** | `ADD #total :uno` con `ExpressionAttributeNames`, y el error queda en el log |
-| `tablero.html` abierto con doble clic | Desde `file://` el navegador manda `Origin: null`, el HTTP API no devuelve la cabecera CORS y **el tablero no recibía datos** | El tablero se sirve desde el mismo dominio que la app; el QR se arma con ese dominio. Nada que editar |
-| Bucket público con sitio web (HTTP) y la API en otro dominio | El celular avisa "No seguro" y hace falta CORS | S3 privado + CloudFront con origin access control (HTTPS) y `/api/*` en el mismo dominio |
-| Sin reintentos | La cuenta deja correr 10 Lambdas a la vez: **de 12 envíos simultáneos, 2 recibieron 503** (de 30, 20) | La página reintenta hasta 6 veces con espera exponencial al azar: con Nova Lite, 50 de 50; con Haiku primero, 42 de 50 |
-| Solo Claude Haiku 4.5 | La cuenta acepta **10 peticiones por minuto** a Haiku | Haiku escribe primero (es el que mejor actúa el personaje) y, si frena, responde Amazon Nova Lite (200 por minuto) |
-| El navegador calcula el rol y manda el texto de las respuestas | Cualquiera puede inflar el tablero con `{"rol": "security"}` y mandar texto libre al prompt | El navegador manda el índice de cada opción; la Lambda valida y calcula el rol. Solo el nombre (24 caracteres, filtrado) es texto libre |
-| `content[0]["text"]` y `temperature` | Funciona con Haiku 4.5; se rompe con un modelo que razona o desde Claude 4.7 (400) | El primer bloque con `text`, sin `temperature`, y el JSON se valida clave por clave antes de mostrarlo |
-| IAM con `bedrock:InvokeModel` en `"*"` | | Solo los dos perfiles y sus modelos base en las tres regiones de destino |
-| Todo con clics en la consola | | Terraform: 20 recursos con un comando, presupuesto opcional y un `destroy.sh` que comprueba que no quede nada |
 
 ## Antes de desplegar (una vez por cuenta)
 
@@ -63,7 +49,7 @@ descarga del provider).
 | Probar sin celular (1 llamada a Bedrock) | `./probar.sh` |
 | El tablero del proyector | La `url_tablero` que imprime `deploy.sh` (nunca con doble clic) |
 | Dejar el tablero en cero antes de empezar | `./reiniciar_tablero.sh` |
-| Momento 2 de la demo: cambiar cómo habla la IA | Consola de Lambda → `rol-tech-api` → Configuration → Environment variables → `PERSONAJE`. Plan B: `./cambiar_personaje.sh "un narrador de fútbol colombiano muy emocionado"`, y sin argumento vuelve al original |
+| Momento 2 de la demo: cambiar cómo habla la IA | Consola de Lambda → `rol-tech-api` → Configuration → Environment variables → `PERSONAJE`. Plan B: `./cambiar_personaje.sh "un narrador de fútbol colombiano muy emocionado"`, y sin argumento vuelve a «un mentor tech divertido» |
 | Momento 3: logs en vivo | Lambda → Monitor → *Open CloudWatch Live Tail*; en la terminal (CLI v2), `aws logs tail /aws/lambda/rol-tech-api --follow` |
 | Ver qué modelo respondió | Cada línea de log trae `"modelo"`; el celular lo dice en "Así viajó tu respuesta" |
 
@@ -96,7 +82,7 @@ centavos. Bedrock no tiene capa gratuita.
 | Archivo | Qué es |
 |---|---|
 | `backend/lambda_function.py` | La API: valida, calcula el rol, la cadena Haiku → Nova Lite → texto de respaldo y el contador |
-| `frontend/index.html` | La app del celular (el diseño de la versión 1, con la API en el mismo dominio y reintentos) |
+| `frontend/index.html` | La app del celular: el test, el perfil y «Así viajó tu respuesta», con la API en el mismo dominio y reintentos |
 | `frontend/tablero.html` | El tablero del proyector: QR y barras cada 4 s, solo con la pestaña visible |
 | `frontend/preguntas.json` | Las 8 preguntas y los 6 roles: lo leen la página y la Lambda |
 | `terraform/` | `main.tf` (tabla, logs, IAM, Lambda), `api.tf`, `web.tf` (S3 y CloudFront), `outputs.tf` (presupuesto y salidas), `variables.tf`, `versions.tf` |

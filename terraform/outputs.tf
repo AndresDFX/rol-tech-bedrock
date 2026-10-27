@@ -2,7 +2,7 @@
 # PRESUPUESTO (opcional) Y SALIDAS
 # ═════════════════════════════════════════════════════════════
 
-# El paso 2.0 de la versión 1 (un presupuesto de USD 5 con aviso por correo), ahora en código.
+# Un presupuesto mensual de USD 5 que avisa por correo.
 # Solo se crea si pasas un correo: EMAIL=tu@correo.com ./deploy.sh
 resource "aws_budgets_budget" "mensual" {
   count        = var.email_presupuesto == "" ? 0 : 1

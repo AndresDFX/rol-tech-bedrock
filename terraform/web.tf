@@ -1,7 +1,7 @@
 # ═════════════════════════════════════════════════════════════
 # LA PÁGINA: bucket S3 PRIVADO servido por CloudFront (HTTPS), con la API en el mismo dominio.
-#   La versión 1 usaba un bucket público con sitio web estático: solo HTTP (el celular avisa
-#   "No seguro") y la API en otro dominio (CORS).
+#   Un bucket público con sitio web estático solo daría HTTP (el celular avisa "No seguro") y dejaría
+#   la API en otro dominio (CORS).
 #     /*      -> S3 (Origin Access Control: solo esta distribución lee el bucket)
 #     /api/*  -> HTTP API, sin caché
 # ═════════════════════════════════════════════════════════════

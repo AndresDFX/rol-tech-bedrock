@@ -1,6 +1,6 @@
 # ═════════════════════════════════════════════════════════════
 # LA API: HTTP API -> Lambda. CloudFront la llama en /api/* desde el mismo dominio de la página,
-# así que no hace falta CORS (la versión 1 lo necesitaba y fallaba con el tablero abierto con doble clic).
+# así que no hace falta CORS.
 # ═════════════════════════════════════════════════════════════
 
 resource "aws_apigatewayv2_api" "api" {

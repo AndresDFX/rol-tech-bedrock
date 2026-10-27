@@ -1,5 +1,5 @@
 # ═════════════════════════════════════════════════════════════
-# "¿Qué rol tech eres?" (versión 2): lo que la versión 1 creaba a mano en la consola, en un solo apply.
+# "¿Qué rol tech eres?": toda la app en un solo apply.
 #
 #   celular -> CloudFront (https://xxxx.cloudfront.net)
 #                /*      -> S3 privado: index.html, tablero.html y preguntas.json      (web.tf)
@@ -49,7 +49,7 @@ resource "aws_cloudwatch_log_group" "api" {
 }
 
 # ─────────────────────────────────────────────────────────────
-# 3. Permisos mínimos: sus logs, su tabla y UN modelo (no "Resource": "*", como la versión 1)
+# 3. Permisos mínimos: sus logs, su tabla y los dos modelos de la cadena (nunca "Resource": "*")
 # ─────────────────────────────────────────────────────────────
 resource "aws_iam_role" "api" {
   name = "${local.funcion}-role"
